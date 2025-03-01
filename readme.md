@@ -22,7 +22,7 @@ Automated validation bot for the Stork Oracle network. This bot helps you automa
 
 1. Clone the repository:
 ```
-git clone 
+git clone https://github.com/BidyutRoy2/Stork.git
 ```
 
 2. Navigate to the project directory:
@@ -37,16 +37,11 @@ npm install
 
 4. Configure your credentials (see Configuration section below)
 
-## Configuration
-
-### Easy Setup with config.json
+5. Setup Your Configuration config.json File
 
 ```
 nano config.json
 ```
-
-The bot now uses a config.json file for configuration. When you run the bot for the first time, it will create a default config.json file that you can edit.
-
 ### Edit the generated `config.json` file with your credentials:
 
 ```json
@@ -67,20 +62,9 @@ The bot now uses a config.json file for configuration. When you run the bot for 
 }
 ```
 
-3. Replace `username` and `password` with your Stork Oracle account credentials
+### Replace `username` and `password` with your Stork Oracle account credentials
 
-### Optional: Proxy Configuration
-
-To use proxy servers for distribution of requests:
-
-1. Create a `proxies.txt` file in the project root
-2. Add one proxy per line in any of these formats:
-   - HTTP proxies: `http://user:pass@host:port`
-   - SOCKS proxies: `socks5://user:pass@host:port`
-
-## Usage
-
-Start the bot with:
+6. ### Start the bot
 ```
 npm start
 ```
