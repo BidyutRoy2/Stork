@@ -18,26 +18,28 @@ Automated validation bot for the Stork Oracle network. This bot helps you automa
 - Node.js 14.0.0 or higher
 - Valid Stork Oracle account
 
-## Installation
+1. Register Link [HERE](https://t.me/hiddengemnews/12318)
 
-1. Clone the repository:
+## Installation bOT
+
+2. Clone the repository:
 ```
 git clone https://github.com/BidyutRoy2/Stork.git
 ```
 
-2. Navigate to the project directory:
+3. Navigate to the project directory:
 ```
 cd Stork
 ```
 
-3. Install dependencies:
+4. Install dependencies:
 ```
 npm install
 ```
 
-4. Configure your credentials (see Configuration section below)
+5. Configure your credentials (see Configuration section below)
 
-5. Setup Your Configuration config.json File
+6. Setup Your Configuration config.json File
 
 ```
 nano config.json
@@ -64,7 +66,7 @@ nano config.json
 
 ### Replace `username` and `password` with your Stork Oracle account credentials
 
-6. ### Start the bot
+7. ### Start the bot
 ```
 npm start
 ```
