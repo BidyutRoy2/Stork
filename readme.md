@@ -1,5 +1,7 @@
 # Stork Auto Bot
 
+![image](https://github.com/user-attachments/assets/8c909339-0130-4170-b923-b4df4d0c7693)
+
 Automated validation bot for the Stork Oracle network. This bot helps you automate the verification process to earn rewards through the Stork Oracle system.
 
 ## Features
