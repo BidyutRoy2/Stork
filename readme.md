@@ -20,7 +20,7 @@ Automated validation bot for the Stork Oracle network. This bot helps you automa
 
 1. Register Link [HERE](https://t.me/hiddengemnews/12318)
 
-## Installation bOT
+## Installation bot
 
 2. Clone the repository:
 ```
