@@ -73,6 +73,8 @@ nano config.json
 npm start
 ```
 
+8. ## If an error occurs after a long time, Stop (CTRL+C)  (npm install)  (npm start)
+
 The bot will:
 1. Authenticate using your credentials from config.json
 2. Fetch signed price data at regular intervals
