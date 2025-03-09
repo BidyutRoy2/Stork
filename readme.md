@@ -24,14 +24,9 @@ Automated validation bot for the Stork Oracle network. This bot helps you automa
 
 ## Installation bot
 
-2. Clone the repository:
+2. ### Clone the repository:
 ```
-git clone https://github.com/BidyutRoy2/stork.git
-```
-
-3. Navigate to the project directory:
-```
-cd stork
+git clone https://github.com/BidyutRoy2/stork.git && cd stork && npm install
 ```
 
 4. Install dependencies:
@@ -46,6 +41,8 @@ nano accounts.js
 ### To Save File (CTRL + X + Y Then Hit ENTER)
 
 6. Setup Your Extension (Access Token , Token ID & Refresh Token"
+![image](https://github.com/user-attachments/assets/6172ebf7-4e4d-45df-9587-678d8d1d4763)
+
 ```
 nano tokens.json
 ```
