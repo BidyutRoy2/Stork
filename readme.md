@@ -45,7 +45,13 @@ nano accounts.js
 ```
 ### To Save File (CTRL + X + Y Then Hit ENTER)
 
-6. ### Start the bot
+6. Setup Your Extension (Access Token , Token ID & Refresh Token"
+```
+nano tokens.json
+```
+### To Save File (CTRL + X + Y Then Hit ENTER)
+
+5. ### Start the bot
 ```
 npm start
 ```
