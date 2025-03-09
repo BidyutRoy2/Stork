@@ -1,17 +1,24 @@
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
-const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
-const { HttpsProxyAgent }= require('https-proxy-agent');
-const { SocksProxyAgent } = require('socks-proxy-agent');
+import AmazonCognitoIdentity from 'amazon-cognito-identity-js';
+import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import { Worker, isMainThread, parentPort, workerData } from 'worker_threads';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+import { accounts } from "./accounts.js"
+import { fileURLToPath } from 'url';
 
-global.navigator = { userAgent: 'node' };
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+// global.navigator = { userAgent: 'node' };
 
 // Load configuration from config.json
 function loadConfig() {
   try {
     const configPath = path.join(__dirname, 'config.json');
+
     if (!fs.existsSync(configPath)) {
       log(`Config file not found at ${configPath}, using default configuration`, 'WARN');
       // Create default config file if it doesn't exist
@@ -20,14 +27,12 @@ function loadConfig() {
           region: 'ap-northeast-1',
           clientId: '5msns4n49hmg3dftp2tp1t2iuh',
           userPoolId: 'ap-northeast-1_M22I44OpC',
-          username: '',  // To be filled by user
-          password: ''   // To be filled by user
-        },
+          },
         stork: {
-          intervalSeconds: 10
+          intervalSeconds: 30
         },
         threads: {
-          maxWorkers: 10
+          maxWorkers: 1
         }
       };
       fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2), 'utf8');
@@ -35,7 +40,8 @@ function loadConfig() {
     }
     
     const userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-    log('Configuration loaded successfully from config.json');
+    log('Configuration loaded successfully from config.json \n');
+    log('Accounts loaded successfully from accounts.js');
     return userConfig;
   } catch (error) {
     log(`Error loading config: ${error.message}`, 'ERROR');
@@ -67,14 +73,12 @@ const config = {
 };
 
 function validateConfig() {
-  if (!config.cognito.username || !config.cognito.password) {
-    log('ERROR: Username and password must be set in config.json', 'ERROR');
-    console.log('\nPlease update your config.json file with your credentials:');
+  if (!accounts[0].username || !accounts[0].password) {
+    log('ERROR: Username and password must be set in accounts.js', 'ERROR');
+    console.log('\nPlease update your accouns.js file with your credentials:');
     console.log(JSON.stringify({
-      cognito: {
         username: "YOUR_EMAIL",
         password: "YOUR_PASSWORD"
-      }
     }, null, 2));
     return false;
   }
@@ -100,6 +104,13 @@ function log(message, type = 'INFO') {
 
 function loadProxies() {
   try {
+    const rotate = arr => {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+        return arr;
+      };
     if (!fs.existsSync(config.threads.proxyFile)) {
       log(`Proxy file not found at ${config.threads.proxyFile}, creating empty file`, 'WARN');
       fs.writeFileSync(config.threads.proxyFile, '', 'utf8');
@@ -110,8 +121,10 @@ function loadProxies() {
       .split('\n')
       .map(line => line.trim())
       .filter(line => line && !line.startsWith('#'));
+    const rotatedProxy = rotate(proxies);
     log(`Loaded ${proxies.length} proxies from ${config.threads.proxyFile}`);
-    return proxies;
+    log(`trying run with ${rotatedProxy[0]}`);
+    return rotatedProxy;
   } catch (error) {
     log(`Error loading proxies: ${error.message}`, 'ERROR');
     return [];
@@ -158,12 +171,12 @@ class CognitoAuth {
 }
 
 class TokenManager {
-  constructor() {
+  constructor(i) {
     this.accessToken = null;
     this.refreshToken = null;
     this.idToken = null;
     this.expiresAt = null;
-    this.auth = new CognitoAuth(config.cognito.username, config.cognito.password);
+    this.auth = new CognitoAuth(accounts[i].username, accounts[i].password);
   }
 
   async getValidToken() {
@@ -389,7 +402,7 @@ if (!isMainThread) {
       }
 
       const signedPrices = await getSignedPrices(tokens);
-      const proxies = loadProxies();
+      const proxies = await loadProxies();
 
       if (!signedPrices || signedPrices.length === 0) {
         log('No data to validate');
@@ -439,10 +452,17 @@ if (!isMainThread) {
 
       displayStats(updatedUserData);
       log(`--------- VALIDATION SUMMARY ---------`);
-      log(`Total data processed: ${actualValidIncrease + actualInvalidIncrease}`);
+      log(`Total data processed: ${newValidCount}`);
       log(`Successful: ${actualValidIncrease}`);
       log(`Failed: ${actualInvalidIncrease}`);
       log('--------- COMPLETE ---------');
+      
+      if(jobs < accounts.length) {
+        setTimeout(() => main(), config.stork.intervalSeconds * 1000);
+      } else if(jobs == accounts.length - 1 || jobs === accounts.length) {
+        jobs = 0;
+        setTimeout(() => main(), config.stork.intervalSeconds * 1000);
+      } 
     } catch (error) {
       log(`Validation process stopped: ${error.message}`, 'ERROR');
     }
@@ -487,14 +507,19 @@ if (!isMainThread) {
       process.exit(1);
     }
     
-    const tokenManager = new TokenManager();
+    log(`processing ${accounts[jobs].username}`);
+    const tokenManager = new TokenManager(jobs);
+    jobs++;
 
     try {
       await tokenManager.getValidToken();
       log('Initial authentication successful');
 
       runValidationProcess(tokenManager);
-      setInterval(() => runValidationProcess(tokenManager), config.stork.intervalSeconds * 1000);
+      
+      //prevent spam by disabling this interval, because up there was triggered with jobs sequence
+//     setInterval(() => runValidationProcess(tokenManager), config.stork.intervalSeconds * 1000);
+
       setInterval(async () => {
         await tokenManager.getValidToken();
         log('Token refreshed via Cognito');
@@ -504,6 +529,7 @@ if (!isMainThread) {
       process.exit(1);
     }
   }
-
+  
+  let jobs = 0;
   main();
 }
