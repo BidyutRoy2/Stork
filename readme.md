@@ -39,36 +39,12 @@ cd Stork
 npm install
 ```
 
-5. Configure your credentials (see Configuration section below)
-
-6. Setup Your Configuration config.json File
-
+5. Set Your Stork Account Email & Password
 ```
-nano config.json
-```
-### Edit the generated `config.json` file with your credentials:
-
-```json
-{
-  "cognito": {
-    "region": "ap-northeast-1",
-    "clientId": "5msns4n49hmg3dftp2tp1t2iuh",
-    "userPoolId": "ap-northeast-1_M22I44OpC",
-    "username": "your-email@example.com",
-    "password": "your-password"
-  },
-  "stork": {
-    "intervalSeconds": 5
-  },
-  "threads": {
-    "maxWorkers": 1
-  }
-}
+nano accounts.js
 ```
 
-### Replace `username` and `password` with your Stork Oracle account credentials
-
-7. ### Start the bot
+6. ### Start the bot
 ```
 npm start
 ```
@@ -81,13 +57,6 @@ The bot will:
 3. Validate each data point
 4. Submit validation results to Stork Oracle
 5. Display your current statistics
-
-## Advanced Configuration Options
-
-In your `config.json` file, you can adjust:
-
-- `stork.intervalSeconds`: How often the validation process runs in seconds (default: 5)
-- `threads.maxWorkers`: Number of concurrent validation workers (default: 1)
 
 ## Troubleshooting
 
