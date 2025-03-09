@@ -26,7 +26,7 @@ Automated validation bot for the Stork Oracle network. This bot helps you automa
 
 2. Clone the repository:
 ```
-git clone https://github.com/BidyutRoy2/Stork.git
+git clone https://github.com/BidyutRoy2/stork.git
 ```
 
 3. Navigate to the project directory:
