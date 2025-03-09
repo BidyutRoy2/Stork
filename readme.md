@@ -31,7 +31,7 @@ git clone https://github.com/BidyutRoy2/Stork.git
 
 3. Navigate to the project directory:
 ```
-cd Stork
+cd stork
 ```
 
 4. Install dependencies:
