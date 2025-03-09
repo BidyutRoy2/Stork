@@ -22,12 +22,12 @@ nano accounts.js
 ```
 ### To Save File (CTRL + X + Y Then Hit ENTER)
 
-4. ### Setup Your Extension (Access Token , Token ID & Refresh Token"
-![image](https://github.com/user-attachments/assets/6172ebf7-4e4d-45df-9587-678d8d1d4763)
-
+4. ### Setup Your Extension Access Token , Token ID & Refresh Token in ``tokens.json`` File
 ```
 nano tokens.json
 ```
+![image](https://github.com/user-attachments/assets/6172ebf7-4e4d-45df-9587-678d8d1d4763)
+
 ### To Save File (CTRL + X + Y Then Hit ENTER)
 
 5. ### Start the bot
