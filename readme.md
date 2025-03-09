@@ -43,6 +43,7 @@ npm install
 ```
 nano accounts.js
 ```
+### To Save File (CTRL + X + Y Then Hit ENTER)
 
 6. ### Start the bot
 ```
